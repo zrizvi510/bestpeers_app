@@ -1,0 +1,12 @@
+<h1>Add new Profile Picture</h1>
+<%= form_with( model: [@user, @user.build_picture], local: true, url: pictures_path(:uid =>@user.id))  do |f| %>
+<%= render "shared/error" %>
+  <div class="field">
+    <h3><%= f.label :image %></h3><br/>
+    <%= f.file_field :image %><br/>
+  </div>
+  <br/>
+  <div class="field">
+    <%= f.submit "Add Picture" %>     
+  </div>
+<% end %>

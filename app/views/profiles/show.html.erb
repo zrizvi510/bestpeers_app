@@ -1,0 +1,70 @@
+
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+
+<%#= render "shared/navbar" %>
+<h1>DashBord</h1>
+
+<% if current_user %>
+  <li><%= link_to current_user.username, profile_path(current_user)%></li>
+  <li><%= link_to "Sign out", destroy_user_session_path, method: :delete  %></li>
+<% else %>
+  <li><%= link_to "Sign up", new_user_registration_path %></li>
+<% end %>
+<%= render "shared/error" %>
+<div>
+  <h1>Profile</h1>
+  <% if @user.picture.image.attached? %>
+    <%= image_tag @user.picture.image, style: "width: 50px; border: 4px solid black; display: block" %>
+    <p>
+  <%= link_to "Edit Profile Picture", edit_picture_path(@user) %>
+</p>
+  <%end %>
+  <h3>First Name : <small style="color:#2F4F4F"><%= @user.profile.first_name %></small> </h3>
+  <h3>Last Name : <small style="color:#2F4F4F"><%= @user.profile.last_name %></small> </h3>
+  <h3>Username : <small style="color:#2F4F4F"><%= @user.username %></small> </h3>
+  <h3>Address : <small style="color:#2F4F4F"><%= @user.profile.address %></small> </h3>
+  <h3>Date_of_Birth : <small style="color:#2F4F4F"><%= @user.profile.date_of_birth %></small> </h3>
+  <h3>Contact Number : <small style="color:#2F4F4F"><%= @user.profile.phone_number %></small> </h3>
+  <h3>Email : <small style="color:#2F4F4F"><%= @user.email %></small> </h3>
+</div>
+
+<h3>Skills</h3>
+<ul>
+  <% @user.profile.skills.each do |i| %>
+    <li style="color:#2F4F4F"><%= i.name %></li>
+  <% end %>
+</ul>
+
+<style>
+  ul.no-bullets {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+
+<h2>Add more Skills</h2>
+
+<ul class="no-bullets">
+  <%= form_with( model: [@user.profile], local: false, url: profile_path(:uid =>@user.id))  do |f| %>  
+    <%= f.collection_check_boxes(:skill_ids, Skill.all, :id, :name) do |i| %>
+      <li style="color:#2F4F4F">
+        <%= i.label { i.check_box } %>
+        <%= i.label %>
+      </li>
+    <% end %>
+    <p>
+      <%= f.submit "Add Skills"%>     
+    </p>
+  <% end %>
+</ul>
+<% if current_user == @user %>
+  <p>
+    <%= link_to "Edit Profile", edit_user_registration_path(@user) %>
+  </p>
+<% end %>
+<% if current_user.type == "Admin" %>
+  <li><%= link_to "All Employees", home_path %></li>
+  <li><%= link_to 'Add New Skills', new_skill_path %></li>
+<% end %>
+

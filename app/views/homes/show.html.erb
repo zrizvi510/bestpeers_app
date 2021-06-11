@@ -1,0 +1,31 @@
+
+<% if current_user.type == "Admin" %>
+  <h1>All Employees</h1>
+  <table>
+    <thead>
+      <tr>
+        <th >Profile</th>
+        <th>username</th>
+        <th >Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @users.each do |user| %>
+        <% if user.type == "Admin" %>
+          <% next %>
+        <% end %>
+        <tr>
+          <td>
+            <% if user.picture.image.attached? %>
+              <%= image_tag user.picture.image, style: "width: 50px; border: 4px solid black; display: block" %>
+            <% end %>
+          </td>
+          <td><%= link_to user.username, profile_path(user) %></td>
+          <td><%= link_to "Edit profile", edit_profile_path(user) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table> 
+  <p><%= link_to 'Add New Skill', new_skill_path %></p>
+<% end %>
